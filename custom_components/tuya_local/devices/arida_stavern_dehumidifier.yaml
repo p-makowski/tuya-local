@@ -1,0 +1,104 @@
+name: Dehumidifier
+products:
+  - id: eguoms25tkxtf5u8
+    manufacturer: Arida
+    model: Stavern
+    model_id: DDS032FX-BEW
+entities:
+  - entity: humidifier
+    class: dehumidifier
+    dps:
+      - id: 1
+        type: boolean
+        name: switch
+      - id: 3
+        type: string
+        name: humidity
+        mapping:
+          - dps_val: "40"
+            value: 40
+            step: 10
+          - dps_val: "50"
+            value: 50
+            step: 10
+          - dps_val: "60"
+            value: 60
+            step: 10
+        range:
+          min: 40
+          max: 60
+      - id: 4
+        type: string
+        name: mode
+        mapping:
+          - dps_val: LOW
+            value: low
+          - dps_val: HIGH
+            value: high
+      - id: 6
+        type: integer
+        name: current_humidity
+      - id: 19
+        type: bitfield
+        name: action
+        mapping:
+          - dps_val: 0
+            value: drying
+          - value: idle
+  - entity: sensor
+    class: temperature
+    dps:
+      - id: 7
+        type: integer
+        name: sensor
+        unit: C
+        class: measurement
+  - entity: select
+    translation_key: timer
+    category: config
+    dps:
+      - id: 17
+        type: string
+        name: option
+        mapping:
+          - dps_val: CANCEL
+            value: cancel
+          - dps_val: 1h
+            value: 1h
+          - dps_val: 2h
+            value: 2h
+          - dps_val: 3h
+            value: 3h
+  - entity: binary_sensor
+    translation_key: tank_full
+    category: diagnostic
+    dps:
+      - id: 19
+        type: bitfield
+        name: sensor
+        # Bit 8 is FULL (verified with the tank pulled); the mask makes this
+        # true whatever other bits are set
+        mask: "08"
+        mapping:
+          - dps_val: 1
+            value: true
+          - value: false
+  - entity: binary_sensor
+    class: problem
+    category: diagnostic
+    dps:
+      - id: 19
+        type: bitfield
+        name: sensor
+        mapping:
+          # 4 is E_Saving (verified), which is not a fault
+          - dps_val: 0
+            value: false
+          - dps_val: 4
+            value: false
+          - dps_val: null
+            value: false
+          - value: true
+      - id: 19
+        type: bitfield
+        name: fault_code
