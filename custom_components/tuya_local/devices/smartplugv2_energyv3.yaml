@@ -33,6 +33,9 @@ products:
     model: 16A
   - id: jwv5jtbscfluha0g
     model: 10A
+  - id: ia2w40rc15wv0tit
+    manufacturer: Deltaco
+    model: SH-OP01
 entities:
   - entity: switch
     class: outlet
